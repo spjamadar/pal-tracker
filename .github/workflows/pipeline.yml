@@ -18,7 +18,7 @@ jobs:
     - name: Publish artifact
       uses: actions/upload-artifact@v1
       with:
-        name: pal-tracker
+        name: spj3-pal-tracker
         path: build/libs/pal-tracker.jar
 
   deploy:
@@ -35,13 +35,13 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v1
       with:
-        name: pal-tracker
+        name: spj3-pal-tracker
     - name: Deploy to cf
       run: |
         cf api "$CF_API_URL"
         cf auth
         cf target -o "$CF_ORG" -s "$CF_SPACE"
-        cf push -p ./pal-tracker/pal-tracker.jar
+        cf push -p ./spj3-pal-tracker/pal-tracker.jar
       env:
         CF_API_URL: ${{ secrets.CF_API_URL }}
         CF_ORG: ${{ secrets.CF_ORG }}
@@ -64,7 +64,7 @@ jobs:
     - name: Migate tracker-database
       run: |
         cf login -a "$CF_API_URL" -o "$CF_ORG" -s "$CF_SPACE" -u "$CF_USERNAME" -p "$CF_PASSWORD"
-        scripts/migrate-databases.sh pal-tracker .
+        scripts/migrate-databases.sh spj3-pal-tracker .
       env:
         CF_API_URL: ${{ secrets.CF_API_URL }}
         CF_ORG: ${{ secrets.CF_ORG }}
